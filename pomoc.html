@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>OIS_DN4</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+ 	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+	  <style>
+      .rdeca{
+          color: red;
+      }
+      .Trdeca{
+          color: #D80000 ;
+      }
+      .ex {
+        margin-right: 20px;
+      }
+	 	</style>
+	</head>
+
+ <body>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand"><img src="http://media.tumblr.com/d3e325ba5f43368f0ceb4c615b2337fd/tumblr_inline_n0jtfpyiPf1qlda3r.jpg" class="img-rounded" alt="Cinque Terre" width="80" height="40"></a>
+      </div>
+      <div>
+        <ul class="nav navbar-nav">
+          <li class="ex"><h3 class="rdeca">PRIKAZ KRVNEGA TLAKA</h3></li>
+          <li><a href="/index.html"><h4 class="Trdeca">Domov</h4></a></li>
+          <li class="active"><a href="/pomoc.html"><h4 class="Trdeca">Pomoč</h4></a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container-fluid">
+    <p><h2>EhrAplikacija za prikazovanje podatkov o srčnem tlaku.</h2></p>
+    <p class="lead">Avtor: Ivan Antešić.
+    <p class="lead">Navodila:</p>
+    <p>- Generirajte želenega pacienta z gumbi "Generiraj bolnika." </p>
+    <p>- Bolnika izberite iz dropdown menija in pritisnite sosednji gumb "PrikaziEhrID".</p>
+    <p>- Ko je v formi napisan EhrId pritisnite gumb "Preberi meritve krvnega tlaka za prikaz meritev."</p>
+    <p>* Če se pri pritisku gumba "PrikaziEhrID" v formi prikaze napis "undefined" pomeni da niste generirali izbranega bolnika in zato za njega nimate podanega EhrId-ja.</p>
+    <p>* Ko zamenjate osebo v dropdown meniju morate se enkrat pritisniti gumb "PrikaziEhrID" za posodobite EhrId-ja.</p>
+    <p>* Če se ne vidi grafa poskusite nadomestini "https" z "http" v URL-ju</p>
+  </div>
+  </body>
+</html>

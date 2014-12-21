@@ -1,92 +1,189 @@
-
 <!DOCTYPE html>
-<html>
-	<head>
-	    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	    <title>EhrScape - Vnos in poizvedovanje po EHR podatkih</title>
-	    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
-	    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
-	    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-	    <script src="demo.js"></script>
-	    <style>
-	  		body {padding: 10px;}
-	  		.btn {margin-top: 10px;}
-	  		.obvestilo {margin-left:10px;}
-	  	</style>
-	</head>
-	<body>
-		<div class="page-header"><h2>Vnos in poizvedovanje po EHR podatkih <small>EhrScape platforma</small></h2></div>
-		<div class="row">
-			<div class="col-lg-6 col-md-6 col-sm-6">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<div class="row">
-							<div class="col-lg-8 col-md-8 col-sm-8"><b>Kreiraj EHR zapis</b> za novega bolnika</div>
-							<div class="col-lg-4 col-md-4 col-sm-4"><select class="form-control input-sm" id="preberiPredlogoBolnika"><option value=""></option><option value="Pujsa,Pepa,1938-10-30T14:58">Pujsa Pepa</option></select></div>
-						</div>
+<html lang="en">
+<head>
+  <title>OIS_DN4</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+ 	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js" charset="utf-8"></script>
+	<script src="demo.js"></script>
+	<style>
+	  
+	  .center {
+       float: none;
+       margin-left: auto;
+       margin-right: auto;
+    }
+    .rdeca{
+      color: red;
+    }
+    .Trdeca{
+      color: #D80000 ;
+    }
+    .ex {
+      margin-right: 20px;
+    }
+    .odmik {
+      margin-left: 15px;
+    }
+    
+		.axis path,
+		.axis line {
+	 	 fill: none;
+		 stroke: #000;
+ 		 shape-rendering: crispEdges;
+		}
+
+		.x.axis path {
+ 		 display: none;
+		}
+
+		.line {
+ 		 fill: none;
+ 		 stroke: #FF4747;
+		 stroke-width: 50px;
+		}
+	</style>
+</head>
+
+<body>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand"><img src="http://media.tumblr.com/d3e325ba5f43368f0ceb4c615b2337fd/tumblr_inline_n0jtfpyiPf1qlda3r.jpg" class="img-rounded" alt="Cinque Terre" width="80" height="40"></a>
+      </div>
+      <div>
+        <ul class="nav navbar-nav">
+          <li class="ex"><h3 class="rdeca">PRIKAZ KRVNEGA TLAKA</h3></li>
+          <li class="active"><a href="/index.html"><h4 class="Trdeca">Domov</h4></a></li>
+          <li><a href="/pomoc.html"><h4 class="Trdeca">Pomoč</h4></a></li>
+          <li><a><button type="button" class="btn btn-danger btn-s" onclick="kreirajEHRzaBolnika1()">Generiraj bolnika MAJ</button>
+          <li><a><button type="button" class="btn btn-danger btn-s" onclick="kreirajEHRzaBolnika2()">Generiraj bolnika IVAN</button>
+          <li><a><button type="button" class="btn btn-danger btn-s" onclick="kreirajEHRzaBolnika3()">Generiraj bolnika VEDRAN</button>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="row">
+ 	<div class="col-lg-6 col-md-6 col-sm-6">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-lg-6 col-md-6 col-sm-6"><b>Izberite pacienta za prikaz njegovih meritev</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+					  <select class="form-control input-sm" id="preberiEhrIdZaVitalneZnake">
+					      <option value="Maj Antesic">Maj Antešić</option>
+					      <option value="Ivan Antesic">Ivan Antešić</option>
+					      <option value="Vedran Antesic">Vedran Antešić</option>
+					    </select>
+					  </div>
+					 <button type="button" class="btn btn-danger btn-s odmik" onclick="izberi()">Prikazi EhrId</button>
+				</div>
+			</div>				
+			<div class="panel-body">
+				<span class="label label-default">EHR ID</span><input id="meritveVitalnihZnakovEHRid" type="text" class="form-control input-mini" placeholder="EhrId">
+				<button type="button" class="btn btn-danger btn-xs" onclick="preberiMeritveVitalnihZnakov()">Preberi meritve krvnega tlaka</button><span id="preberiMeritveVitalnihZnakovSporocilo"></span>
+		    <div id="rezultatMeritveVitalnihZnakov"></div>
+		  	</div>
+	 	</div>			
+	</div>
+	
+	<div class="col-lg-6 col-md-6 col-sm-6">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-lg-6 col-md-6 col-sm-6"><b>Prikaz meritev: </div><span id="kreirajSporocilo"></span>
+				</div>
+			</div>				
+			<div class="panel-body">
+        <div id="result"></div>
+		  </div>
+	 	</div>			
+	</div>
+  </div>
+
+  <div class="center">
+		<div class="col-lg-6 col-md-6 col-sm-6 center">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<div class="row">
+						<div class="col-lg-6 col-md-6 col-sm-6"><b>Graf normalnega nihanja krvnega tlaka čez dan</div>
 					</div>
-					<div class="panel-body">
-						<span class="label label-default">Ime</span><input id="kreirajIme" type="text" class="form-control input-mini" placeholder="Osama">
-						<span class="label label-default">Priimek</span><input id="kreirajPriimek" type="text" class="form-control" placeholder="Bin Laden">
-						<span class="label label-default">Datum rojstva</span><input id="kreirajDatumRojstva" type="text" class="form-control" placeholder="1957-03-10T09:08">
-						<button type="button" class="btn btn-primary btn-xs" onclick="kreirajEHRzaBolnika()">Dodaj osnovne podatke o bolniku</button><span id="kreirajSporocilo"></span>
-				  	</div>
-				</div>
-			</div>
-			<div class="col-lg-6 col-md-6 col-sm-6">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<div class="row">
-							<div class="col-lg-8 col-md-8 col-sm-8"><b>Preberi EHR zapis</b> obstoječega bolnika</div>
-							<div class="col-lg-4 col-md-4 col-sm-4"><select class="form-control input-sm" id="preberiObstojeciEHR"><option value=""></option><option value="254f791d-2e7c-49d9-b646-376f62d6ead5">Dejan Lavbič</option><option value="d564c6a3-5a43-4fcc-bfa7-9ac76e9673bd">Pujsa Pepa</option><option value="b931580f-2b05-488b-985b-8d9ffb08ad02">Ata Smrk</option></select></div>
-						</div>
-					</div>
-					<div class="panel-body">
-						<span class="label label-default">EHR ID</span><input id="preberiEHRid" type="text" class="form-control input-mini" placeholder="7b661e12-3a98-21ad-c29e-2dc9f5a3d885">
-						<button type="button" class="btn btn-primary btn-xs" onclick="preberiEHRodBolnika()">Preberi osnovne podatke o bolniku</button><span id="preberiSporocilo"></span>
-				  	</div>
-				</div>
-			</div>
+				</div>				
+				<div class="panel-body">
+  	      <div id="chart"></div>
+			  </div>
+		 	</div>			
 		</div>
-		<div class="row">
-			<div class="col-lg-6 col-md-6 col-sm-6">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<div class="row">
-							<div class="col-lg-8 col-md-8 col-sm-8"><b>Vnos</b> meritve <b>vitalnih znakov</b> bolnika</div>
-							<div class="col-lg-4 col-md-4 col-sm-4"><select class="form-control input-sm" id="preberiObstojeciVitalniZnak"><option value=""></option><option value="b931580f-2b05-488b-985b-8d9ffb08ad02|2014-11-21T11:40Z|185|80.0|36.50|118|92|98|medicinska sestra Smrketa">Ata Smrk</option></select></div>
-						</div>
-					</div>				
-					<div class="panel-body">
-						<span class="label label-default">EHR ID</span><input id="dodajVitalnoEHR" type="text" class="form-control input-mini" placeholder="7b661e12-3a98-21ad-c29e-2dc9f5a3d885">
-						<span class="label label-default">Datum in ura</span><input id="dodajVitalnoDatumInUra" type="text" class="form-control input-mini" placeholder="2014-11-21T11:40Z">
-						<span class="label label-default">Telesna višina</span><div class="input-group"><input id="dodajVitalnoTelesnaVisina" type="text" class="form-control input-mini" placeholder="185"><span class="input-group-addon">cm</span></div>
-						<span class="label label-default">Telesna teža</span><div class="input-group"><input id="dodajVitalnoTelesnaTeza" type="text" class="form-control input-mini" placeholder="80.00"><span class="input-group-addon">kg</span></div>
-						<span class="label label-default">Telesna temperatura</span><div class="input-group"><input id="dodajVitalnoTelesnaTemperatura" type="text" class="form-control input-mini" placeholder="36.50"><span class="input-group-addon">°C</span></div>
-						<span class="label label-default">Sistolični krvni tlak</span><div class="input-group"><input id="dodajVitalnoKrvniTlakSistolicni" type="text" class="form-control input-mini" placeholder="118"><span class="input-group-addon">mm Hg</span></div>
-						<span class="label label-default">Diastolični krvni tlak</span><div class="input-group"><input id="dodajVitalnoKrvniTlakDiastolicni" type="text" class="form-control input-mini" placeholder="92"><span class="input-group-addon">mm Hg</span></div>
-						<span class="label label-default">Nasičenost krvi s kisikom</span><div class="input-group"><input id="dodajVitalnoNasicenostKrviSKisikom" type="text" class="form-control input-mini" placeholder="98"><span class="input-group-addon">%</span></div>
-						<span class="label label-default">Merilec</span><input id="dodajVitalnoMerilec" type="text" class="form-control input-mini" placeholder="medicinska sestra Hrastova Micka">
-						<button type="button" class="btn btn-primary btn-xs" onclick="dodajMeritveVitalnihZnakov()">Dodaj meritve vitalnih znakov</button><span id="dodajMeritveVitalnihZnakovSporocilo"></span>
-				  	</div>
-				</div>
-			</div>	
-			<div class="col-lg-6 col-md-6 col-sm-6">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<div class="row">
-							<div class="col-lg-6 col-md-6 col-sm-6"><b>Pregled</b> meritev <b>vitalnih znakov</b> bolnika</div>
-							<div class="col-lg-3 col-md-3 col-sm-3"><select class="form-control input-sm" id="preberiTipZaVitalneZnake"><option value="telesna temperatura">telesna temperatura</option><option value="telesna temperatura AQL">telesna temperatura (filter na podhladitev)</option><option value="telesna teža">telesna teža</option></select></div>
-							<div class="col-lg-3 col-md-3 col-sm-3"><select class="form-control input-sm" id="preberiEhrIdZaVitalneZnake"><option value=""></option><option value="b931580f-2b05-488b-985b-8d9ffb08ad02">Ata Smrk</option><option value="d564c6a3-5a43-4fcc-bfa7-9ac76e9673bd">Pujsa Pepa</option></select></div>
-						</div>
-					</div>				
-					<div class="panel-body">
-						<span class="label label-default">EHR ID</span><input id="meritveVitalnihZnakovEHRid" type="text" class="form-control input-mini" placeholder="7b661e12-3a98-21ad-c29e-2dc9f5a3d885">
-						<button type="button" class="btn btn-primary btn-xs" onclick="preberiMeritveVitalnihZnakov('telesna temperatura')">Preberi meritve vitalnih znakov</button><span id="preberiMeritveVitalnihZnakovSporocilo"></span>
-						<div id="rezultatMeritveVitalnihZnakov"></div>
-				  	</div>
-				</div>			
-			</div>
-		</div>
-	</body>
+	</div>
+
+<script> 
+
+var margin = {top: 20, right: 20, bottom: 30, left: 50},
+    width = $("#chart").width() - margin.left - margin.right,
+    height = $("#chart").width()/1.9 - margin.top - margin.bottom;
+
+var parseDate = d3.time.format("%H:%M").parse;
+
+var x = d3.time.scale()
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+var line = d3.svg.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.close); });
+
+var svg = d3.select("#chart").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+d3.tsv("data.tsv", function(error, data) {
+  data.forEach(function(d) {
+    d.date = parseDate(d.date);
+    d.close = +d.close;
+  });
+
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+  y.domain(d3.extent(data, function(d) { return d.close; }));
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text(" Sistolicni tlak(mmHg)");
+
+  svg.append("path")
+      .datum(data)
+      .attr("class", "line")
+      .attr("d", line);
+});
+</script>
+  </body>
 </html>
